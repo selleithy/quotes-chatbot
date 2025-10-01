@@ -83,7 +83,6 @@
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
-            placeholder-color: rgba(255, 255, 255, 0.7);
         }
         .input-area input::placeholder {
             color: rgba(255, 255, 255, 0.7);
@@ -179,18 +178,21 @@
             const chatContainer = document.getElementById('chatContainer');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            const uniqueId = 'msg-' + Date.now(); // Unique ID for each message to avoid conflicts
             messageDiv.innerHTML = isUser ? `<div>${text}</div>` : `
                 <div>${text}</div>
-                <div class="quote" id="tempQuote"></div>
-                <div class="author" id="tempAuthor"></div>
+                <div class="quote" id="${uniqueId}-quote"></div>
+                <div class="author" id="${uniqueId}-author"></div>
             `;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+            return uniqueId; // Return for filling quote later
         }
 
         async function getUpliftingQuote(feeling) {
             try {
                 const response = await fetch(`${API_BASE}/quotes/by-feeling?feeling=${feeling}`);
+                if (!response.ok) throw new Error('Network response was not ok');
                 const quote = await response.json();
                 return quote;
             } catch (error) {
@@ -201,15 +203,13 @@
 
         async function selectFeeling(feeling) {
             const userMessage = `I'm feeling ${feeling}.`;
-            addMessage(userMessage, true);
-            addMessage(`Here's something to uplift you for feeling ${feeling}:`, false);
+            const botMessageId = addMessage(userMessage, true);
+            const botResponseId = addMessage(`Here's something to uplift you for feeling ${feeling}:`, false);
             const quote = await getUpliftingQuote(feeling);
-            setTimeout(() => {
-                const tempQuote = document.getElementById('tempQuote');
-                const tempAuthor = document.getElementById('tempAuthor');
-                if (tempQuote) tempQuote.textContent = quote.text;
-                if (tempAuthor) tempAuthor.textContent = `- ${quote.author}`;
-            }, 500);
+            const quoteEl = document.getElementById(`${botResponseId}-quote`);
+            const authorEl = document.getElementById(`${botResponseId}-author`);
+            if (quoteEl) quoteEl.textContent = quote.text;
+            if (authorEl) authorEl.textContent = `- ${quote.author}`;
         }
 
         async function sendMessage() {
@@ -223,4 +223,47 @@
             let feeling = 'general';
             const lowerMessage = message.toLowerCase();
             if (lowerMessage.includes('sad') || lowerMessage.includes('down')) feeling = 'sad';
-            else if
+            else if (lowerMessage.includes('anxious') || lowerMessage.includes('worry')) feeling = 'anxious';
+            else if (lowerMessage.includes('stress') || lowerMessage.includes('overwhelmed')) feeling = 'stressed';
+            else if (lowerMessage.includes('unmotivated') || lowerMessage.includes('tired')) feeling = 'unmotivated';
+
+            const quote = await getUpliftingQuote(feeling);
+            const botResponseId = addMessage(`I sense you're feeling ${feeling}. Here's an uplifting quote:`, false);
+            const quoteEl = document.getElementById(`${botResponseId}-quote`);
+            const authorEl = document.getElementById(`${botResponseId}-author`);
+            if (quoteEl) quoteEl.textContent = quote.text;
+            if (authorEl) authorEl.textContent = `- ${quote.author}`;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        async function addQuote(event) {
+            event.preventDefault();
+            const text = document.getElementById('textInput').value;
+            const author = document.getElementById('authorInput').value || 'Unknown';
+            const feeling = document.getElementById('feelingInput').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/quotes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, author, feeling })
+                });
+                if (response.ok) {
+                    alert('Quote added successfully!');
+                    document.getElementById('textInput').value = '';
+                    document.getElementById('authorInput').value = '';
+                    document.getElementById('feelingInput').value = '';
+                } else {
+                    alert('Error adding quote');
+                }
+            } catch (error) {
+                console.error('Error adding quote:', error);
+                alert('Error adding quote');
+            }
+        }
+    </script>
+</body>
+</html>
