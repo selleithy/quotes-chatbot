@@ -180,10 +180,21 @@
     <p style="text-align: center; margin-bottom: 20px;">Select a feeling below, or type a message. I'll uplift you with a quote!</p>
     
     <div class="feelings-buttons">
-        <button onclick="selectFeeling('sad')">Feeling Sad</button>
-        <button onclick="selectFeeling('anxious')">Feeling Anxious</button>
-        <button onclick="selectFeeling('stressed')">Feeling Stressed</button>
-        <button onclick="selectFeeling('unmotivated')">Feeling Unmotivated</button>
+     <button onclick="selectFeeling('sad')">😢 Sad</button>
+    <button onclick="selectFeeling('anxious')">😰 Anxious</button>
+    <button onclick="selectFeeling('angry')">😠 Angry</button>
+    <button onclick="selectFeeling('frustrated')">😤 Frustrated</button>
+    <button onclick="selectFeeling('stressed')">😩 Stressed</button>
+    <button onclick="selectFeeling('overwhelmed')">😵 Overwhelmed</button>
+    <button onclick="selectFeeling('exhausted')">😓 Exhausted</button>
+    <button onclick="selectFeeling('unmotivated')">😴 Unmotivated</button>
+    <button onclick="selectFeeling('lonely')">😔 Lonely</button>
+    <button onclick="selectFeeling('detached')">😐 Detached</button>
+    <button onclick="selectFeeling('fearful')">😨 Fearful</button>
+    <button onclick="selectFeeling('heartbroken')">💔 Heartbroken</button>
+    <button onclick="selectFeeling('despairing')">😞 Despairing</button>
+    <button onclick="selectFeeling('grateful')">😊 Grateful</button>
+    <button onclick="selectFeeling('longing')">🌟 Longing</button>
     </div>
     
     <div class="chat-container" id="chatContainer">
@@ -202,11 +213,38 @@
 
     <form class="add-form" onsubmit="addQuote(event)">
         <select id="feelingInput" required>
-            <option value="">Select Feeling</option>
-            <option value="sad">Sad</option>
-            <option value="anxious">Anxious</option>
-            <option value="stressed">Stressed</option>
-            <option value="unmotivated">Unmotivated</option>
+        <option value="">Select Feeling</option>
+        <option value="agitated">Agitated</option>
+        <option value="ambivalent">Ambivalent</option>
+        <option value="anxious">Anxious</option>
+        <option value="angry">Angry</option>
+        <option value="apathetic">Apathetic</option>
+        <option value="ashamed">Ashamed</option>
+        <option value="burnt out">Burnt Out</option>
+        <option value="confused">Confused</option>
+        <option value="despairing">Despairing</option>
+        <option value="detached">Detached</option>
+        <option value="disgusted">Disgusted</option>
+        <option value="distressed">Distressed</option>
+        <option value="embarrassed">Embarrassed</option>
+        <option value="exhausted">Exhausted</option>
+        <option value="fearful">Fearful</option>
+        <option value="forlorn">Forlorn</option>
+        <option value="frustrated">Frustrated</option>
+        <option value="grateful">Grateful</option>
+        <option value="heartbroken">Heartbroken</option>
+        <option value="insecure">Insecure</option>
+        <option value="jittery">Jittery</option>
+        <option value="longing">Longing</option>
+        <option value="lonely">Lonely</option>
+        <option value="nostalgic">Nostalgic</option>
+        <option value="overwhelmed">Overwhelmed</option>
+        <option value="repulsed">Repulsed</option>
+        <option value="resentful">Resentful</option>
+        <option value="sad">Sad</option>
+        <option value="stressed">Stressed</option>
+        <option value="unmotivated">Unmotivated</option>
+        <option value="uneasy">Uneasy</option>
         </select>
         <input type="text" id="authorInput" placeholder="Author (optional)">
         <textarea id="textInput" placeholder="Enter an inspiring quote" required></textarea>
@@ -266,8 +304,24 @@
             const lowerMessage = message.toLowerCase();
             if (lowerMessage.includes('sad') || lowerMessage.includes('down')) feeling = 'sad';
             else if (lowerMessage.includes('anxious') || lowerMessage.includes('worry')) feeling = 'anxious';
-            else if (lowerMessage.includes('stress') || lowerMessage.includes('overwhelmed')) feeling = 'stressed';
-            else if (lowerMessage.includes('unmotivated') || lowerMessage.includes('tired')) feeling = 'unmotivated';
+            else if (lowerMessage.includes('angry') || lowerMessage.includes('mad')) feeling = 'angry';
+            else if (lowerMessage.includes('frustrated') || lowerMessage.includes('annoyed')) feeling = 'frustrated';
+            else if (lowerMessage.includes('stress') || lowerMessage.includes('tense')) feeling = 'stressed';
+            else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much')) feeling = 'overwhelmed';
+            else if (lowerMessage.includes('exhausted') || lowerMessage.includes('tired')) feeling = 'exhausted';
+            else if (lowerMessage.includes('unmotivated') || lowerMessage.includes('lazy')) feeling = 'unmotivated';
+            else if (lowerMessage.includes('lonely') || lowerMessage.includes('alone')) feeling = 'lonely';
+            else if (lowerMessage.includes('detached') || lowerMessage.includes('numb')) feeling = 'detached';
+            else if (lowerMessage.includes('fearful') || lowerMessage.includes('scared')) feeling = 'fearful';
+            else if (lowerMessage.includes('heartbroken') || lowerMessage.includes('hurt')) feeling = 'heartbroken';
+            else if (lowerMessage.includes('despairing') || lowerMessage.includes('hopeless')) feeling = 'despairing';
+            else if (lowerMessage.includes('grateful') || lowerMessage.includes('thankful')) feeling = 'grateful';
+            else if (lowerMessage.includes('longing') || lowerMessage.includes('miss')) feeling = 'longing';
+            else if (lowerMessage.includes('confused') || lowerMessage.includes('lost')) feeling = 'confused';
+            else if (lowerMessage.includes('disgusted') || lowerMessage.includes('gross')) feeling = 'disgusted';
+            else if (lowerMessage.includes('agitated') || lowerMessage.includes('restless')) feeling = 'agitated';
+            else if (lowerMessage.includes('ashamed') || lowerMessage.includes('guilty')) feeling = 'ashamed';
+            else if (lowerMessage.includes('distressed') || lowerMessage.includes('upset')) feeling = 'distressed';
 
             const quote = await getUpliftingQuote(feeling);
             const botResponseId = addMessage(`I sense you're feeling ${feeling}. Here's an uplifting quote:`, false);
