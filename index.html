@@ -196,12 +196,8 @@
         <input type="text" id="userInput" placeholder="Type a message... (e.g., I'm feeling down)" onkeypress="handleKeyPress(event)">
         <button onclick="sendMessage()">Send</button>
 
-        <button id="micButton" style="background: rgba(255, 255, 255, 0.2); 
-            border: none; 
-            color: #fff; 
-            padding: 10px; 
-            border-radius: 20px; cursor: pointer; 
-            font-size: 18px;">🎤</button>
+<!-- adding a voice button -->
+        <button id="micButton" style="background: rgba(255, 255, 255, 0.2); border: none; color: #fff; padding: 10px; border-radius: 20px; cursor: pointer; font-size: 18px; display: block;">🎤</button>
     </div>
 
     <form class="add-form" onsubmit="addQuote(event)">
@@ -312,31 +308,34 @@
         }
 // Voice input setup
 const micButton = document.getElementById('micButton');
-if (micButton && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
+if (micButton) {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
 
-    micButton.onclick = () => {
-        recognition.start();
-        micButton.textContent = '🔴';
-    };
+        micButton.onclick = () => {
+            recognition.start();
+            micButton.textContent = '🔴';
+        };
 
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('userInput').value = transcript;
-        sendMessage(); // Auto-send after speaking
-        micButton.textContent = '🎤';
-    };
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('userInput').value = transcript;
+            sendMessage();
+            micButton.textContent = '🎤';
+        };
 
-    recognition.onerror = () => {
-        alert('Voice input failed—try typing instead!');
-        micButton.textContent = '🎤';
-    };
-} else {
-    micButton.style.display = 'none'; // Hide if not supported
+        recognition.onerror = () => {
+            alert('Voice input failed—try typing instead!');
+            micButton.textContent = '🎤';
+        };
+    } else {
+        micButton.onclick = () => alert('Voice not supported in this browser—use Chrome!');
+        micButton.title = 'Voice not supported';
+    }
 }
     </script>
 </body>
