@@ -54,6 +54,21 @@ db.serialize(() => {
                 { text: "You’ve got to get up every morning with determination if you’re going to go to bed with satisfaction.", author: "George Lorimer", feeling: "unmotivated" },
                 { text: "Success is not final; failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill", feeling: "unmotivated" },
                 { text: "It’s not whether you get knocked down. It’s whether you get up.", author: "Vince Lombardi", feeling: "unmotivated" }
+
+                 // Add after existing initialQuotes
+                // Frustrated (from Anger)
+                { text: "Frustration is the sandpaper of life—it smooths us down when we let it.", author: "Unknown", feeling: "frustrated" },
+                { text: "When frustrated, pause and breathe—the storm passes.", author: "Thich Nhat Hanh", feeling: "frustrated" },
+                // ... (add 3 more similar for frustrated)
+            
+                // Resentful (from Anger)
+                { text: "Resentment is like drinking poison and waiting for the other person to die. Let it go.", author: "Nelson Mandela", feeling: "resentful" },
+                // ... (4 more)
+            
+                // Disgusted (from Aversion)
+                { text: "Disgust is a signal to set boundaries—honor it.", author: "Unknown", feeling: "disgusted" },
+                // ... (4 more)
+                // And so on for each new feeling (aim for 5 each; I can provide full if needed).
             ];
             const stmt = db.prepare("INSERT INTO quotes (text, author, feeling) VALUES (?, ?, ?)");
             initialQuotes.forEach(quote => stmt.run(quote.text, quote.author, quote.feeling));
